@@ -1,30 +1,22 @@
-import java.util.Random;
-
 public class MatrixProcessor {
     public static void main(String[] args) {
         try {
             int rows = 3;
-            int cols = 3;
-            int[][] matrixX = new int[rows][cols];
-            int[][] matrixY = new int[rows][cols];
-            int[][] resultMatrix = new int[rows][cols];
+            int cols = 4;
+            double[][] matrixA = new double[rows][cols];
+            double[][] matrixC;
 
-            Random rand = new Random();
+            initializeMatrix(matrixA);
 
-            fillMatrix(matrixX, rand);
-            fillMatrix(matrixY, rand);
+            System.out.println("Matrix A:");
+            printMatrix(matrixA);
 
-            mergeMatrices(matrixX, matrixY, resultMatrix);
+            matrixC = transposeMatrix(matrixA);
+            System.out.println("Transposed Matrix C (BT):");
+            printMatrix(matrixC);
 
-            System.out.println("Matrix X:");
-            displayMatrix(matrixX);
-            System.out.println("Matrix Y:");
-            displayMatrix(matrixY);
-            System.out.println("Matrix Result (X + Y):");
-            displayMatrix(resultMatrix);
-
-            int calculatedSum = computeColumnSum(resultMatrix); // Compute the required sum
-            System.out.println("Sum of max elements in even columns and min in odd columns: " + calculatedSum);
+            double average = calculateAverage(matrixC);
+            System.out.println("Average value of Matrix C: " + average);
 
         } catch (Exception ex) {
             System.err.println("An error occurred: " + ex.getMessage());
@@ -32,47 +24,51 @@ public class MatrixProcessor {
     }
 
     // Fill the matrix with random values
-    private static void fillMatrix(int[][] matrix, Random rand) {
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
-                matrix[row][col] = rand.nextInt(10);
+    private static void initializeMatrix(double[][] matrix) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[i][j] = Math.random() * 100;
             }
         }
     }
 
+    // Transpose the matrix
+    private static double[][] transposeMatrix(double[][] matrix) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        double[][] transposed = new double[cols][rows];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                transposed[j][i] = matrix[i][j];
+            }
+        }
+
+        return transposed;
+    }
+
     // Print the matrix
-    private static void displayMatrix(int[][] matrix) {
-        for (int[] row : matrix) {
-            for (int val : row) {
-                System.out.print(val + " ");
+    private static void printMatrix(double[][] matrix) {
+        for (double[] row : matrix) {
+            for (double value : row) {
+                System.out.printf("%8.2f ", value);
             }
             System.out.println();
         }
     }
 
-    // Add two matrices
-    private static void mergeMatrices(int[][] matrix1, int[][] matrix2, int[][] result) {
-        for (int row = 0; row < matrix1.length; row++) {
-            for (int col = 0; col < matrix1[row].length; col++) {
-                result[row][col] = matrix1[row][col] + matrix2[row][col];
-            }
-        }
-    }
+    // Calculate the average value of a matrix
+    private static double calculateAverage(double[][] matrix) {
+        double sum = 0;
+        int count = 0;
 
-    // Compute the sum of max in even columns and min in odd columns
-    private static int computeColumnSum(int[][] matrix) {
-        int totalSum = 0;
-        for (int col = 0; col < matrix[0].length; col++) {
-            int extremeValue = (col % 2 == 0) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-            for (int[] row : matrix) {
-                if (col % 2 == 0) {
-                    extremeValue = Math.max(extremeValue, row[col]);
-                } else {
-                    extremeValue = Math.min(extremeValue, row[col]);
-                }
+        for (double[] row : matrix) {
+            for (double value : row) {
+                sum += value;
+                count++;
             }
-            totalSum += extremeValue;
         }
-        return totalSum;
+
+        return sum / count;
     }
 }
