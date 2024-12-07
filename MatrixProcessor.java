@@ -7,16 +7,21 @@ public class MatrixProcessor {
             int cols = 3;
             int[][] matrixX = new int[rows][cols];
             int[][] matrixY = new int[rows][cols];
+            int[][] resultMatrix = new int[rows][cols];
 
             Random rand = new Random();
 
             fillMatrix(matrixX, rand);
             fillMatrix(matrixY, rand);
 
+            mergeMatrices(matrixX, matrixY, resultMatrix);
+
             System.out.println("Matrix X:");
             displayMatrix(matrixX);
             System.out.println("Matrix Y:");
             displayMatrix(matrixY);
+            System.out.println("Matrix Result (X + Y):");
+            displayMatrix(resultMatrix);
 
         } catch (Exception ex) {
             System.err.println("An error occurred: " + ex.getMessage());
@@ -39,6 +44,15 @@ public class MatrixProcessor {
                 System.out.print(val + " ");
             }
             System.out.println();
+        }
+    }
+
+    // Add two matrices
+    private static void mergeMatrices(int[][] matrix1, int[][] matrix2, int[][] result) {
+        for (int row = 0; row < matrix1.length; row++) {
+            for (int col = 0; col < matrix1[row].length; col++) {
+                result[row][col] = matrix1[row][col] + matrix2[row][col];
+            }
         }
     }
 }
