@@ -23,6 +23,9 @@ public class MatrixProcessor {
             System.out.println("Matrix Result (X + Y):");
             displayMatrix(resultMatrix);
 
+            int calculatedSum = computeColumnSum(resultMatrix); // Compute the required sum
+            System.out.println("Sum of max elements in even columns and min in odd columns: " + calculatedSum);
+
         } catch (Exception ex) {
             System.err.println("An error occurred: " + ex.getMessage());
         }
@@ -54,5 +57,22 @@ public class MatrixProcessor {
                 result[row][col] = matrix1[row][col] + matrix2[row][col];
             }
         }
+    }
+
+    // Compute the sum of max in even columns and min in odd columns
+    private static int computeColumnSum(int[][] matrix) {
+        int totalSum = 0;
+        for (int col = 0; col < matrix[0].length; col++) {
+            int extremeValue = (col % 2 == 0) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+            for (int[] row : matrix) {
+                if (col % 2 == 0) {
+                    extremeValue = Math.max(extremeValue, row[col]);
+                } else {
+                    extremeValue = Math.min(extremeValue, row[col]);
+                }
+            }
+            totalSum += extremeValue;
+        }
+        return totalSum;
     }
 }
